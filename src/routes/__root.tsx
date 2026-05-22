@@ -7,6 +7,10 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
+import { useState, useEffect } from "react";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+import { LoadingScreen } from "@/components/LoadingScreen";
 
 import appCss from "../styles.css?url";
 
@@ -72,16 +76,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Transpo — Digital Innovation For Hassle-Free Logistics" },
+      { name: "description", content: "Transpo delivers parcels worldwide with real-time tracking, competitive pricing and end-to-end logistics solutions across air, ocean and land." },
+      { property: "og:title", content: "Transpo — Hassle-Free Logistics" },
+      { property: "og:description", content: "Worldwide shipping, real-time tracking and a dependable logistics partner." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap",
+      },
       {
         rel: "stylesheet",
         href: appCss,
@@ -110,10 +119,30 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    if (typeof window !== "undefined" && sessionStorage.getItem("transpo-loaded")) {
+      setLoading(false);
+    }
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
+      {loading && (
+        <LoadingScreen
+          onDone={() => {
+            sessionStorage.setItem("transpo-loaded", "1");
+            setLoading(false);
+          }}
+        />
+      )}
+      <div className="flex min-h-screen flex-col">
+        <Header />
+        <main className="flex-1">
+          <Outlet />
+        </main>
+        <Footer />
+      </div>
     </QueryClientProvider>
   );
 }
