@@ -4,6 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
 import { ArrowLeft, Trash2, Loader2, Save, Clock, MapPin } from "lucide-react";
+
+type Status = "pending" | "picked_up" | "in_transit" | "out_for_delivery" | "delivered" | "exception" | "cancelled";
 import { statusLabels, statusColors } from "./admin";
 
 type Shipment = {
@@ -106,7 +108,7 @@ function ShipmentDetail() {
       const { error } = await supabase
         .from("shipments")
         .update({
-          status: newStatus as Shipment["status"],
+          status: newStatus as Status,
           current_location: newLocation || shipment.current_location,
         })
         .eq("id", shipment.id);
@@ -115,7 +117,7 @@ function ShipmentDetail() {
       if (newNotes) {
         await supabase.from("shipment_events").insert({
           shipment_id: shipment.id,
-          status: newStatus as Shipment["status"],
+          status: newStatus as Status,
           location: newLocation || null,
           notes: newNotes,
           created_by: user?.id,
@@ -125,7 +127,7 @@ function ShipmentDetail() {
       // Same status — just log a manual event
       const { error } = await supabase.from("shipment_events").insert({
         shipment_id: shipment.id,
-        status: newStatus as Shipment["status"],
+        status: newStatus as Status,
         location: newLocation || null,
         notes: newNotes || null,
         created_by: user?.id,
