@@ -1,42 +1,48 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "@tanstack/react-router";
 import { Outlet } from "@tanstack/react-router";
+import { useState, useEffect } from "react";
 
 const pageVariants = {
   initial: {
-    opacity: 1,
-    y: 40,
-    scale: 0.98,
+    opacity: 0,
+    y: 24,
+    scale: 0.995,
   },
   animate: {
     opacity: 1,
-    y: 1,
+    y: 0,
     scale: 1,
   },
   exit: {
-    opacity: 0.8,
-    y: -10,
-    scale: 1.01,
+    opacity: 1,
+    y: -12,
+    scale: 1.005,
   },
 };
 
 export function PageTransition() {
   const router = useRouter();
   const pathname = router.state.location.pathname;
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <AnimatePresence mode="wait">
       <motion.div
         key={pathname}
-        initial="initial"
+        initial={mounted ? "initial" : false}
         animate="animate"
         exit="exit"
         variants={pageVariants}
         transition={{
           type: "spring",
-          stiffness: 320,
-          damping: 36,
-          opacity: { duration: 0.22 },
+          stiffness: 300,
+          damping: 32,
+          opacity: { duration: 0.2 },
         }}
         className="will-change-transform"
       >
