@@ -1,7 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useRouter } from "@tanstack/react-router";
-import { Outlet } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { useRouter, Outlet } from "@tanstack/react-router";
+import { useHydrated } from "@tanstack/react-router";
 
 const pageVariants = {
   initial: {
@@ -24,17 +23,17 @@ const pageVariants = {
 export function PageTransition() {
   const router = useRouter();
   const pathname = router.state.location.pathname;
-  const [mounted, setMounted] = useState(false);
+  const hydrated = useHydrated();
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  if (!hydrated) {
+    return <Outlet />;
+  }
 
   return (
     <AnimatePresence mode="wait">
       <motion.div
         key={pathname}
-        initial={mounted ? "initial" : false}
+        initial="initial"
         animate="animate"
         exit="exit"
         variants={pageVariants}
