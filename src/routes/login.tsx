@@ -76,7 +76,7 @@ function LoginPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-navy via-navy/95 to-primary/30 px-4 py-16">
       <div className="mx-auto max-w-md">
-        <Link to="/" className="flex justify-center"><LogoMark className="text-white" /></Link>
+        <Link to="/" className="flex justify-center"><LogoMark light /></Link>
         <div className="mt-8 rounded-2xl bg-white p-8 shadow-2xl">
           <h1 className="text-2xl font-bold text-navy">
             {mode === "signin" ? "Admin sign in" : "Create admin account"}
