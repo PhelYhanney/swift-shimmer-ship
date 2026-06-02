@@ -11,6 +11,8 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { PageTransition } from "@/components/PageTransition";
+import { AuthProvider } from "@/hooks/use-auth";
+import { Toaster } from "@/components/ui/sonner";
 
 import appCss from "../styles.css?url";
 
@@ -130,21 +132,24 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {loading && (
-        <LoadingScreen
-          onDone={() => {
-            sessionStorage.setItem("transpo-loaded", "1");
-            setLoading(false);
-          }}
-        />
-      )}
-      <div className="flex min-h-screen flex-col">
-        <Header />
-        <main className="flex-1">
-          <PageTransition />
-        </main>
-        <Footer />
-      </div>
+      <AuthProvider>
+        {loading && (
+          <LoadingScreen
+            onDone={() => {
+              sessionStorage.setItem("transpo-loaded", "1");
+              setLoading(false);
+            }}
+          />
+        )}
+        <div className="flex min-h-screen flex-col">
+          <Header />
+          <main className="flex-1">
+            <PageTransition />
+          </main>
+          <Footer />
+        </div>
+        <Toaster />
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
