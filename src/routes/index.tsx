@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import {
   Package, Monitor, MapPin, Truck, DollarSign, ThumbsUp, Shield, ShieldCheck,
-  ChevronDown, ChevronLeft, ChevronRight, ArrowRight, Quote, Apple, Play,
+  ChevronDown, ChevronLeft, ChevronRight, ArrowRight, Quote,
 } from "lucide-react";
 import heroTruck from "@/assets/hero-truck.jpg";
 import airCargo from "@/assets/air-cargo.jpg";
@@ -34,7 +34,6 @@ function HomePage() {
       <Testimonials />
       <FAQ />
       <Articles />
-      <AppDownload />
     </>
   );
 }
@@ -159,10 +158,6 @@ function Hero() {
                     <span>Multiple Tracking Numbers</span>
                     <a href="#" className="text-primary hover:underline">Need Help</a>
                   </div>
-                  <div className="mt-3 flex gap-2">
-                    <StoreBadge icon={<Apple className="h-4 w-4" />} title="Download on the" name="App Store" />
-                    <StoreBadge icon={<Play className="h-4 w-4" />} title="GET IT ON" name="Google Play" />
-                  </div>
                 </div>
               </div>
               <p className="max-w-sm text-sm leading-relaxed text-white/85">
@@ -173,18 +168,6 @@ function Hero() {
         </div>
       </div>
     </section>
-  );
-}
-
-function StoreBadge({ icon, title, name }: { icon: React.ReactNode; title: string; name: string }) {
-  return (
-    <button className="flex flex-1 items-center gap-2 rounded-md bg-navy px-3 py-2 text-left text-navy-foreground transition-transform hover:scale-[1.03] active:scale-95">
-      {icon}
-      <div className="leading-tight">
-        <div className="text-[8px] uppercase opacity-70">{title}</div>
-        <div className="text-xs font-semibold">{name}</div>
-      </div>
-    </button>
   );
 }
 
@@ -459,27 +442,3 @@ function Articles() {
   );
 }
 
-/* ---------- APP DOWNLOAD ---------- */
-function AppDownload() {
-  return (
-    <section className="relative overflow-hidden bg-primary text-primary-foreground">
-      <div className="absolute -right-24 top-1/4 h-72 w-72 rounded-full border border-white/15 animate-spin-slow" />
-      <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 py-16 lg:grid-cols-2">
-        <div>
-          <div className="mb-2 text-xs font-bold uppercase tracking-widest opacity-90">App Download</div>
-          <h2 className="mb-6 text-4xl font-bold leading-tight">Avail Transpo services from your phone.</h2>
-          <p className="mb-6 max-w-md text-sm text-white/85">
-            Download the app for instant notifications and easy parcel tracking.
-          </p>
-          <div className="flex gap-3">
-            <StoreBadge icon={<Apple className="h-5 w-5" />} title="Download on the" name="App Store" />
-            <StoreBadge icon={<Play className="h-5 w-5" />} title="GET IT ON" name="Google Play" />
-          </div>
-        </div>
-        <div className="relative">
-          <img src={warehouseWorker} alt="Warehouse worker with tablet" loading="lazy" className="h-80 w-full rounded-xl object-cover shadow-2xl md:h-96" width={1024} height={1024} />
-        </div>
-      </div>
-    </section>
-  );
-}
