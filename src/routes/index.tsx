@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Package, Monitor, MapPin, Truck, DollarSign, ThumbsUp, Shield, ShieldCheck,
   ChevronDown, ChevronLeft, ChevronRight, ArrowRight, Quote, Apple, Play,
