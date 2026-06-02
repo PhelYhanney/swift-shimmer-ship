@@ -158,7 +158,6 @@ function Hero() {
                     <span>Multiple Tracking Numbers</span>
                     <a href="#" className="text-primary hover:underline">Need Help</a>
                   </div>
-                  </div>
                 </div>
               </div>
               <p className="max-w-sm text-sm leading-relaxed text-white/85">
