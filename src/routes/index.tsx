@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Package, Monitor, MapPin, Truck, DollarSign, ThumbsUp, Shield, ShieldCheck,
   ChevronDown, ChevronLeft, ChevronRight, ArrowRight, Quote, Apple, Play,
@@ -39,6 +39,74 @@ function HomePage() {
   );
 }
 
+/* ---------- TYPEWRITER ---------- */
+function TypewriterText() {
+  const lines = [
+    { text: "Digital Innovation", glow: false },
+    { text: "For Hassle-Free", glow: false },
+    { text: "Logistics.", glow: true },
+  ];
+  const [displayed, setDisplayed] = useState<string[]>(["", "", ""]);
+  const [lineIdx, setLineIdx] = useState(0);
+  const [charIdx, setCharIdx] = useState(0);
+  const [showCursor, setShowCursor] = useState(true);
+  const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    if (done) return;
+    if (lineIdx >= lines.length) {
+      setDone(true);
+      return;
+    }
+    const line = lines[lineIdx];
+    if (charIdx < line.text.length) {
+      const timer = setTimeout(() => {
+        setDisplayed((prev) => {
+          const next = [...prev];
+          next[lineIdx] = line.text.slice(0, charIdx + 1);
+          return next;
+        });
+        setCharIdx((c) => c + 1);
+      }, 55);
+      return () => clearTimeout(timer);
+    } else {
+      const timer = setTimeout(() => {
+        setLineIdx((i) => i + 1);
+        setCharIdx(0);
+      }, 400);
+      return () => clearTimeout(timer);
+    }
+  }, [lineIdx, charIdx, done]);
+
+  useEffect(() => {
+    if (done) {
+      const blink = setInterval(() => setShowCursor((s) => !s), 700);
+      return () => clearInterval(blink);
+    }
+    const blink = setInterval(() => setShowCursor((s) => !s), 530);
+    return () => clearInterval(blink);
+  }, [done]);
+
+  return (
+    <h1 className="text-4xl font-bold leading-[1.05] text-white sm:text-5xl md:text-6xl min-h-[3.15em]">
+      {lines.map((line, i) => (
+        <span key={i} className="block">
+          <span className={line.glow ? "text-primary-glow" : ""}>
+            {displayed[i]}
+          </span>
+          {(i === lineIdx || (i === lines.length - 1 && done)) && (
+            <span
+              className={`inline-block w-[3px] h-[0.85em] align-middle ml-0.5 -translate-y-px ${
+                showCursor ? "bg-primary-glow" : "bg-transparent"
+              }`}
+            />
+          )}
+        </span>
+      ))}
+    </h1>
+  );
+}
+
 /* ---------- HERO ---------- */
 function Hero() {
   const [tab, setTab] = useState<"tracking" | "ship">("tracking");
@@ -56,10 +124,7 @@ function Hero() {
           <div className="absolute inset-0 bg-gradient-to-r from-navy/85 via-navy/40 to-transparent" />
           <div className="absolute inset-0 flex flex-col justify-between p-6 sm:p-12">
             <div className="max-w-2xl animate-fade-up">
-              <h1 className="text-4xl font-bold leading-[1.05] text-white sm:text-5xl md:text-6xl">
-                Digital Innovation<br />For Hassle-Free<br />
-                <span className="text-primary-glow">Logistics.</span>
-              </h1>
+              <TypewriterText />
             </div>
             <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-end">
               <div className="w-full max-w-md rounded-xl bg-white p-2 shadow-2xl animate-fade-up">
