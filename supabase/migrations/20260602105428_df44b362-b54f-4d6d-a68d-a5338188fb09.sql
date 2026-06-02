@@ -1,5 +1,7 @@
 DROP POLICY IF EXISTS "Public can view shipments by tracking number" ON public.shipments;
 
+DROP POLICY IF EXISTS "Admins can view shipments" ON public.shipments;
+
 CREATE POLICY "Admins can view shipments"
 ON public.shipments
 FOR SELECT
@@ -7,6 +9,8 @@ TO authenticated
 USING (has_role(auth.uid(), 'admin'::app_role));
 
 DROP POLICY IF EXISTS "Public can view shipment events" ON public.shipment_events;
+
+DROP POLICY IF EXISTS "Admins can view shipment events" ON public.shipment_events;
 
 CREATE POLICY "Admins can view shipment events"
 ON public.shipment_events
