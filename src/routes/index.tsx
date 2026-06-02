@@ -124,10 +124,7 @@ function Hero() {
           <div className="absolute inset-0 bg-gradient-to-r from-navy/85 via-navy/40 to-transparent" />
           <div className="absolute inset-0 flex flex-col justify-between p-6 sm:p-12">
             <div className="max-w-2xl animate-fade-up">
-              <h1 className="text-4xl font-bold leading-[1.05] text-white sm:text-5xl md:text-6xl">
-                Digital Innovation<br />For Hassle-Free<br />
-                <span className="text-primary-glow">Logistics.</span>
-              </h1>
+              <TypewriterText />
             </div>
             <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-end">
               <div className="w-full max-w-md rounded-xl bg-white p-2 shadow-2xl animate-fade-up">
