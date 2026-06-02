@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import {
   Package, Monitor, MapPin, Truck, DollarSign, ThumbsUp, Shield, ShieldCheck,
@@ -108,7 +108,24 @@ function TypewriterText() {
 
 /* ---------- HERO ---------- */
 function Hero() {
+  const navigate = useNavigate();
   const [tab, setTab] = useState<"tracking" | "ship">("tracking");
+  const [trackingInput, setTrackingInput] = useState("");
+  const [shippingInput, setShippingInput] = useState("");
+
+  const handleTrack = () => {
+    const trimmed = trackingInput.trim();
+    if (trimmed) {
+      navigate({ to: `/tracking?code=${encodeURIComponent(trimmed)}` });
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && tab === "tracking") {
+      handleTrack();
+    }
+  };
+
   return (
     <section className="relative overflow-hidden bg-background pb-20">
       <div className="mx-auto max-w-7xl px-4 pt-6 sm:px-6">
@@ -147,11 +164,18 @@ function Hero() {
                   <div className="mb-3 flex items-center gap-2 rounded-md border border-border px-3 py-2.5">
                     <MapPin className="h-4 w-4 text-muted-foreground" />
                     <input
+                      value={tab === "tracking" ? trackingInput : shippingInput}
+                      onChange={(e) => (tab === "tracking" ? setTrackingInput(e.target.value) : setShippingInput(e.target.value))}
+                      onKeyDown={handleKeyDown}
                       placeholder={tab === "tracking" ? "Type your tracking number here" : "Where to ship?"}
                       className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
                     />
                   </div>
-                  <button className="btn-shine w-full rounded-md bg-primary py-3 text-sm font-semibold text-primary-foreground transition-transform hover:scale-[1.02] active:scale-95">
+                  <button
+                    onClick={() => tab === "tracking" && handleTrack()}
+                    disabled={tab === "tracking" && !trackingInput.trim()}
+                    className="btn-shine w-full rounded-md bg-primary py-3 text-sm font-semibold text-primary-foreground transition-transform hover:scale-[1.02] active:scale-95 disabled:opacity-60"
+                  >
                     {tab === "tracking" ? "Track" : "Get Quote"}
                   </button>
                   <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">

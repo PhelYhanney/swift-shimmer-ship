@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Search, MapPin, Loader2, PackageX } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
 import { supabase } from "@/integrations/supabase/client";
@@ -11,6 +11,9 @@ export const Route = createFileRoute("/tracking")({
       { name: "description", content: "Track parcels and freight in real time with Transpo's global tracking network." },
       { property: "og:title", content: "Track Your Shipment — Transpo" },
     ],
+  }),
+  validateSearch: (search: Record<string, unknown>) => ({
+    code: (search.code as string) || "",
   }),
   component: TrackingPage,
 });
@@ -46,13 +49,20 @@ type TrackResult = {
 };
 
 function TrackingPage() {
-  const [code, setCode] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [searched, setSearched] = useState(false);
+  const { code: initialCode } = Route.useSearch();
+  const [code, setCode] = useState(initialCode || "");
+  const [loading, setLoading] = useState(!!initialCode);
+  const [searched, setSearched] = useState(!!initialCode);
   const [result, setResult] = useState<TrackResult | null>(null);
 
-  const track = async () => {
-    const trimmed = code.trim();
+  useEffect(() => {
+    if (initialCode && !result) {
+      track(initialCode);
+    }
+  }, [initialCode, result]);
+
+  const track = async (trackingCode?: string) => {
+    const trimmed = (trackingCode || code).trim();
     if (!trimmed) return;
     setLoading(true);
     setSearched(true);
@@ -91,7 +101,7 @@ function TrackingPage() {
               />
             </div>
             <button
-              onClick={track}
+              onClick={() => track()}
               disabled={loading || !code.trim()}
               className="btn-shine flex items-center justify-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-transform hover:scale-[1.03] active:scale-95 disabled:opacity-60"
             >
